@@ -24,7 +24,7 @@ namespace RethinkDb.DatumConverters
             datumConverter = null;
 
             var dataContractAttribute = typeof(T).GetCustomAttribute<DataContractAttribute>();
-            if (dataContractAttribute == null)
+			if (dataContractAttribute == null || typeof(T).IsEnum)
                 return false;
 
             Type datumConverterType = TypeCache<T>.Instance.Value;
