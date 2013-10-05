@@ -168,6 +168,9 @@
     <Compile Include="ConnectionExtensions.cs" />
     <Compile Include="SynchronousApiExtensions.cs" />
     <Compile Include="Interfaces\IScalarQuery.cs" />
+    <Compile Include="DatumConverters\EnumDatumConverterFactory.cs" />
+    <Compile Include="DatumConverters\IEnumerableTDatumConverterFactory.cs" />
+    <Compile Include="DatumConverters\IDictionaryTDatumConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
