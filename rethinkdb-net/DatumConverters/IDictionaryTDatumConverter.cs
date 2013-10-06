@@ -56,7 +56,8 @@ namespace RethinkDb.DatumConverters
 							.Invoke(null);*/
 					for (int i = 0; i < datum.r_array.Count; i++)
 					{
-						Console.WriteLine("**Keypair");
+						Console.WriteLine("**Keypair, count="+datum.r_object.Count);
+
 						foreach (var assocPair in datum.r_object)
 						{
 							// left/right for a join

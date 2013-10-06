@@ -37,7 +37,6 @@ namespace RethinkDb
                 GuidDatumConverterFactory.Instance,
                 UriDatumConverterFactory.Instance,
                 TupleDatumConverterFactory.Instance,
-                ArrayDatumConverterFactory.Instance,
 				IEnumerableTDatumConverterFactory.Instance,
 				IDictionaryTDatumConverterFactory.Instance,
                 AnonymousTypeDatumConverterFactory.Instance,

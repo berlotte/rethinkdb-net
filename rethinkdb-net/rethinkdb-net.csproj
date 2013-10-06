@@ -84,7 +84,6 @@
     <Compile Include="Logging\DefaultLogger.cs" />
     <Compile Include="Logging\LoggingCategory.cs" />
     <Compile Include="Logging\LoggingUtils.cs" />
-    <Compile Include="DatumConverters\ArrayDatumConverterFactory.cs" />
     <Compile Include="DatumConverters\DataContractDatumConverterFactory.cs" />
     <Compile Include="DatumConverters\PrimitiveDatumConverterFactory.cs" />
     <Compile Include="DatumConverters\TupleDatumConverterFactory.cs" />
