@@ -170,6 +170,7 @@
     <Compile Include="DatumConverters\EnumDatumConverterFactory.cs" />
     <Compile Include="DatumConverters\IEnumerableTDatumConverterFactory.cs" />
     <Compile Include="DatumConverters\IDictionaryTDatumConverter.cs" />
+    <Compile Include="DatumConverters\ArrayDatumConverterFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

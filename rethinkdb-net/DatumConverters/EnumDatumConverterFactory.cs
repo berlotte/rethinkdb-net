@@ -34,7 +34,7 @@ namespace RethinkDb.DatumConverters
 
         public override Spec.Datum ConvertObject(T en)
         {                
-			int val = Convert.ToInt32(en);
+            int val = Convert.ToInt32(en);
             return new Spec.Datum() { type = Spec.Datum.DatumType.R_NUM, r_num =  val };
         }
 

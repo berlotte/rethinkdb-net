@@ -5,6 +5,14 @@ using System.Reflection;
 
 namespace RethinkDb.DatumConverters
 {
+    /// <summary>
+    /// This is a default/fallback converter for Generic Collections.
+    /// Anything not handled by an optimized and specialized ConverterFactory before will be handled here.
+    /// We accept any type implementing IEnumerable<T> and having a constructor that can initialize the collection
+    ///   when provided an IEnumerable<T> parameter. 
+    /// Ex: Queue<T> is okay since  new Queue<T>(IEnumerable<T>) exists
+    ///     LinkedList is NOT since new LinkedList<T> (IEnumerable<T>) constructor is not implemented   
+    /// </summary>
 	public class IEnumerableTDatumConverterFactory : AbstractDatumConverterFactory
 	{
 		public static readonly IEnumerableTDatumConverterFactory Instance = new IEnumerableTDatumConverterFactory();
@@ -18,11 +26,11 @@ namespace RethinkDb.DatumConverters
 			datumConverter = null;
 			if (rootDatumConverterFactory == null)
 				throw new ArgumentNullException("rootDatumConverterFactory");
-			bool isColl = (typeof(T).IsArray 
-								    || (typeof(T).IsGenericType  			
-								    	&& typeof(T).GetInterface("IEnumerable") != null
-								    	&& typeof(T).GetInterface("IDictionary") == null
-								    	)
+            Type t = typeof(T);
+			bool isColl = (t.IsGenericType 
+                            && typeof(IEnumerable).IsAssignableFrom(t) 
+                            && !typeof(IDictionary).IsAssignableFrom(t)
+                            && t.GetConstructor( new Type[]{typeof(IEnumerable<>)} ) != null
 			);	
 
 			if(!isColl)
@@ -39,7 +47,7 @@ namespace RethinkDb.DatumConverters
 
 			public IEnumerableTConverter(IDatumConverterFactory rootDatumConverterFactory)
 			{
-				elementType = typeof(T).IsArray ? typeof(T).GetElementType() : typeof(T).GetGenericArguments()[0];
+				elementType = typeof(T).GetGenericArguments()[0];
 				this.arrayTypeConverter = rootDatumConverterFactory.Get(elementType);
 			}
 
@@ -56,11 +64,8 @@ namespace RethinkDb.DatumConverters
 					var retval = Array.CreateInstance(elementType, datum.r_array.Count);
 					for (int i = 0; i < datum.r_array.Count; i++)
 						retval.SetValue(arrayTypeConverter.ConvertDatum(datum.r_array [i]), i);
-
-					if(typeof(T).IsArray)
-						return (T)Convert.ChangeType(retval, typeof(T));
-					else
-						return (T)Activator.CreateInstance(typeof(T), retval);
+					
+					return (T)Activator.CreateInstance(typeof(T), retval);
 				}
 				else
 				{
