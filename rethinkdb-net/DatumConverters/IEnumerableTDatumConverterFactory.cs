@@ -27,15 +27,22 @@ namespace RethinkDb.DatumConverters
 			if (rootDatumConverterFactory == null)
 				throw new ArgumentNullException("rootDatumConverterFactory");
             Type t = typeof(T);
-			bool isColl = (t.IsGenericType 
-                            && typeof(IEnumerable).IsAssignableFrom(t) 
-                            && !typeof(IDictionary).IsAssignableFrom(t)
-                            && t.GetConstructor( new Type[]{typeof(IEnumerable<>)} ) != null
-			);	
 
-			if(!isColl)
-				return false;
+            if(!t.IsGenericType 
+               || !(typeof(IEnumerable).IsAssignableFrom(t))
+               || ( typeof(IDictionary).IsAssignableFrom(t))
+                )
+                return false;
 
+            Type elementType = typeof(T).GetGenericArguments()[0];
+
+            Type ienumerableParam = typeof(IEnumerable<>).MakeGenericType(new Type[]{elementType});
+            Type ilistParam = typeof(IList<>).MakeGenericType(new Type[]{elementType});
+            ConstructorInfo ienumerableCtor = t.GetConstructor( new Type[]{ienumerableParam} );
+            ConstructorInfo ilistCtor = t.GetConstructor( new Type[]{ilistParam} );
+            if(ienumerableCtor == null && ilistCtor == null)
+                return false;
+			
 			datumConverter = new IEnumerableTConverter<T>(rootDatumConverterFactory);
 			return true;
 		}
